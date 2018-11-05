@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas压缩图片</title>
+</head>
+<body>
+    <input type="file" id="tesImg" onchange="tes(this)" />
+    <img id="tesId">
+<script>
+    /*
+    canvas重新绘制图片drawImage();
+    再利用其API toDataURL的第二个参数将图片进行压缩  
+   */
+    function tes(ob){
+        var file=ob.files[0];
+        var reader=new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload=function(e){
+            var imgObj=new Image();
+            imgObj.src=this.result;
+            imgObj.onload=function(a){
+                var canvas = document.createElement('canvas');
+                canvas.width = 100;
+                canvas.height = 100;
+                //drawImage第一个参数是要使用的原始素材，2,3两个参数是绘制的起点，4,5两个参数表示绘制的宽度和高度
+                canvas.getContext("2d").drawImage(imgObj, 0, 0, 100,100);
+                //toDataURL将图片转换成base64格式，第一个参数是type类型，第二个参数表示在原图的基础上压缩比例
+                document.getElementById("tesId").src = canvas.toDataURL("image/jpeg", 0.5);  
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
